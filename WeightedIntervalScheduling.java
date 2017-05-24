@@ -1,9 +1,9 @@
 import java.util.*;
 
 public class WeightedIntervalScheduling {
-	private int[][] jobs;
-	private int[] memo;
-	private ArrayList<Integer> includedJobs = new ArrayList<Integer>();
+	private int[][] jobs;	//array of jobs. Each job is [id, startTime, finishTime, value]
+	private int[] memo;		//memoization array
+	private ArrayList<Integer> includedJobs = new ArrayList<Integer>();		//holds jobs in optimal solution. The id's are id's of the sorted jobs, so must be converted to the original ID's by getJobInfo
 	
 	public void calcSchedule(int[][] inputJobs){
 		jobs= inputJobs;
@@ -26,42 +26,38 @@ public class WeightedIntervalScheduling {
 		System.out.println("Maximum profit from the optimal set of jobs = " + memo[memo.length-1]);
 		
 		findSolution(memo.length-1);
-		System.out.println("Jobs Included in optimal solution:\n" +includedJobs);
+		System.out.println("\nJobs Included in optimal solution:");
 		for(int i=includedJobs.size()-1; i>=0; i--){		//Loop backwards to display jobs in increasing order of their ID's
 			System.out.println(getJobInfo(includedJobs.get(i)));
 		}
-
-		System.out.println();
-		for(int i=0; i<jobs.length; i++){
-			System.out.println(getJobInfo(i));
-		}
 	}
 	
+//BINARY SEARCH improvement waiting
+	//Find the index of the job finishing before job i starts (uses jobs[][] array sorted by finish time)
 	private int latestCompatible(int i){
 		for (int j=i-1; j>=0; j--){
-			System.out.println("jobs[j][2] <= jobs[i][1] " + jobs[j][2] +" <= "+ jobs[i][1] +" is "+ (jobs[j][2] <= jobs[i][1]) ) ;
-			if (jobs[j][2] <= jobs[i][1]){  //If j's finish time is less than or equal to i's start time
+			// System.out.println("jobs[j][2] <= jobs[i][1] " + jobs[j][2] +" <= "+ jobs[i][1] +" is "+ (jobs[j][2] <= jobs[i][1]) ) ;
+			if (jobs[j][2] <= jobs[i][1]){	//If j's finish time is less than or equal to i's start time
 				return j;
 			}
 		}
 		return 0;	//or return -1??
 	}
 	
+	//Recursive method to retrace the memoization array & find optimal solution
 	private void findSolution(int j){
-		System.out.println(j);
 		if(j==0){
-			System.out.println("base case");
 			return;
 		}
+		//Simplify to just 3 cases? no nested if
 		else{
 			int compatibleIndex = latestCompatible(j);  //find latest finishing job that's compatible with job i
 			if(compatibleIndex==-1){    //If not compatible job exists, reset value to 0
 				compatibleIndex=0;
 				System.out.println("FIND SOL found compatible==-1, j="+j);
 			}
-			//System.out.println(memo[j-1]);    //fails
+			
 			if(jobs[j][3]+ memo[compatibleIndex] > memo[j-1]){
-				System.out.println("Included Job " + j);
 				includedJobs.add(j);
 				findSolution(compatibleIndex);
 			}
@@ -72,7 +68,7 @@ public class WeightedIntervalScheduling {
 	}
 	
 	private String getJobInfo(int jobIndex){
-		return "Job " + jobs[jobIndex][0] + ": (" + jobs[jobIndex][1] +"-" + jobs[jobIndex][2] +") value=" + jobs[jobIndex][3];
+		return "Job " + jobs[jobIndex][0] + ":  Time (" + jobs[jobIndex][1] +"-" + jobs[jobIndex][2] +") Value=" + jobs[jobIndex][3];
 	}
 
 
