@@ -9,7 +9,7 @@ public class WeightedIntervalScheduling {
 		jobs= inputJobs;
 		memo = new int[jobs.length];	//create memoization array
 		
-		Arrays.sort(jobs, (a, b) -> Integer.compare(a[1], b[1]));	//Sort jobs by finish time
+		Arrays.sort(jobs, (a, b) -> Integer.compare(a[2], b[2]));	//Sort jobs by finish time
 		
 		memo[0]=0;		//base case with no jobs selected
 		
@@ -19,16 +19,16 @@ public class WeightedIntervalScheduling {
 				compatibleIndex=0;
 				System.out.println("found compatible==-1, i="+i);
 			}
-			memo[i] = Math.max( jobs[i][2]+memo[compatibleIndex],  memo[i-1] );		//add max value if job is included or if it's not
+			memo[i] = Math.max( jobs[i][3]+memo[compatibleIndex], memo[i-1] );		//add max value if job is included or if it's not
 		}
 		
 		System.out.println("Memoization array: " + Arrays.toString(memo));
 		System.out.println("Maximum profit from the optimal set of jobs = " + memo[memo.length-1]);
 		
 		findSolution(memo.length-1);
-		System.out.println("All included jobs as a list:\n" +includedJobs);
-		for(int jobIndex : includedJobs){
-			System.out.println(getJobInfo(jobIndex));
+		System.out.println("Jobs Included in optimal solution:\n" +includedJobs);
+		for(int i=includedJobs.size()-1; i>=0; i--){		//Loop backwards to display jobs in increasing order of their ID's
+			System.out.println(getJobInfo(includedJobs.get(i)));
 		}
 
 		System.out.println();
@@ -39,8 +39,8 @@ public class WeightedIntervalScheduling {
 	
 	private int latestCompatible(int i){
 		for (int j=i-1; j>=0; j--){
-			System.out.println("jobs[j][1] <= jobs[i][0] " + jobs[j][1] +" <= "+ jobs[i][0] +" is "+ (jobs[j][1] <= jobs[i][0]) ) ;
-			if (jobs[j][1] <= jobs[i][0]){  //If j's finish time is less than or equal to i's start time
+			System.out.println("jobs[j][2] <= jobs[i][1] " + jobs[j][2] +" <= "+ jobs[i][1] +" is "+ (jobs[j][2] <= jobs[i][1]) ) ;
+			if (jobs[j][2] <= jobs[i][1]){  //If j's finish time is less than or equal to i's start time
 				return j;
 			}
 		}
@@ -60,7 +60,7 @@ public class WeightedIntervalScheduling {
 				System.out.println("FIND SOL found compatible==-1, j="+j);
 			}
 			//System.out.println(memo[j-1]);    //fails
-			if(jobs[j][2]+ memo[compatibleIndex] > memo[j-1]){
+			if(jobs[j][3]+ memo[compatibleIndex] > memo[j-1]){
 				System.out.println("Included Job " + j);
 				includedJobs.add(j);
 				findSolution(compatibleIndex);
@@ -72,7 +72,7 @@ public class WeightedIntervalScheduling {
 	}
 	
 	private String getJobInfo(int jobIndex){
-		return "Job " + jobIndex + ": (" + jobs[jobIndex][0] +"-" + jobs[jobIndex][1] +") value=" + jobs[jobIndex][2];
+		return "Job " + jobs[jobIndex][0] + ": (" + jobs[jobIndex][1] +"-" + jobs[jobIndex][2] +") value=" + jobs[jobIndex][3];
 	}
 
 
@@ -81,15 +81,15 @@ public class WeightedIntervalScheduling {
 		//int[][] inputJobs = {{0,0,0}, {3, 10, 20}, {6, 19, 100}, {1, 2, 50}, {2, 100, 200}};
 		//int[][] inputJobs = {{0,0,0}, {1, 2, 10}, {2, 3, 20}};
 		//int[][] inputJobs = {{0,0,0}, {3, 10, 20}};
-		int[][] inputJobs = {{0,0,0},	//dummy 0th item to make array indexes line up
-							{0, 6, 3},
-							{1, 4, 5},
-							{3, 5, 5},
-							{3, 8, 8},
-							{4, 7, 3},
-							{5, 9, 7},
-							{6, 10, 3},
-							{8, 11, 4}
+		int[][] inputJobs = {{0,0,0,0},	//dummy 0th item to make array indexes line up
+							{1, 0, 6, 3},
+							{2, 1, 4, 5},
+							{3, 3, 5, 5},
+							{4, 3, 8, 8},
+							{5, 4, 7, 3},
+							{6, 5, 9, 7},
+							{7, 6, 10, 3},
+							{8, 8, 11, 4}
 							};
 		tester.calcSchedule(inputJobs);
 	}
