@@ -8,7 +8,8 @@ Jobs have a start time, a finish time & a value (or weight) associated with it
 
 ## Input Jobs
 ![](images/input-jobs.png)  
-job _ is compatible with _
+For example: job 6 is compatible with job 3 & 2, but not job 1  
+**Finding the next job compatible with job `i` involves looking earlier in the jobs array for a job that finishes before or at the same time as job `i`**
 
 ## Pseudocode
 ![](images/optimal-pseudocode.png)  
@@ -20,7 +21,9 @@ job _ is compatible with _
 Binary Search is O(log n) and there are **n** jobs, so **O(n log(n) )**
 
 ## Solution (Jobs Selected in Optimal Subset)
-![](images/optimal-solution.png)
+![](images/optimal-solution.png)  
+Optimal Subset is **Job 2 & Job 6**  
+**Maximum Value = 5 + 7 = 12**
 
 ## Usage
 - A 2D array of `inputJobs[][]` created in `main()`
