@@ -20,7 +20,7 @@ public class WeightedIntervalScheduling {
 		System.out.println("Memoization array: " + Arrays.toString(memo));
 		System.out.println("Maximum profit from the optimal set of jobs = " + memo[memo.length-1]);
 		
-		findSolution(memo.length-1);		//Recursively find solution & update includedJobs
+		findSolutionRecursive(memo.length-1);		//Recursively find solution & update includedJobs
 		System.out.println("\nJobs Included in optimal solution:");
 		for(int i=includedJobs.size()-1; i>=0; i--){		//Loop backwards to display jobs in increasing order of their ID's
 			System.out.println(getJobInfo(includedJobs.get(i)));
@@ -46,7 +46,7 @@ public class WeightedIntervalScheduling {
 	}
 	
 	//Recursive method to retrace the memoization array & find optimal solution
-	private void findSolution(int j){
+	private void findSolutionRecursive(int j){
 		if(j==0){	//base case
 			return;
 		}
@@ -54,10 +54,10 @@ public class WeightedIntervalScheduling {
 			int compatibleIndex = latestCompatible(j);  //find latest finishing job that's compatible with job i
 			if(jobs[j][3]+ memo[compatibleIndex] > memo[j-1]){	//Case where job j was included (from optimal substructure)
 				includedJobs.add(j);	//add job index to solution
-				findSolution(compatibleIndex);	//recursively find remaining jobs starting the the latest compatible job
+				findSolutionRecursive(compatibleIndex);	//recursively find remaining jobs starting the the latest compatible job
 			}
 			else{	//case where job j was NOT included, remove job j from the possible jobs in the solution
-				findSolution(j-1);
+				findSolutionRecursive(j-1);
 			}
 		}
 	}
