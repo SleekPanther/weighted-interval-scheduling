@@ -22,8 +22,8 @@ Binary Search is O(log n) and there are **n** jobs, so **O(n log(n) )**
 
 ## Solution (Jobs Selected in Optimal Subset)
 ![](images/optimal-solution.png)  
-Optimal Subset is **Job 2 & Job 6**  
-**Maximum Value = 5 + 7 = 12**
+#### Optimal Subset is **Job 2 & Job 6**    <br> **Maximum Value = 5 + 7 = 12**
+
 
 ## Usage
 - A 2D array of `inputJobs[][]` created in `main()`
@@ -35,6 +35,8 @@ Optimal Subset is **Job 2 & Job 6**
 - 2D `jobs[]` array is sorted by finish time so the ID's of jobs are no longer the array indexes  
 `findSolution()` uses `jobs[jobIndex][0]` to access the `0th` number in the actual job to get the original ID
 - This allows the rest of the code to just use array indexes in `jobs` when finding the optimal value
+- Comparisons in `latestCompatible()` are made with `<=` since a job `x` can be **compatible** with job `i` if `x` finishes at exactly the same time as `i` starts
+- `getJobInfo()` converts an `int` job index in `jobs[][]` sorted by finish time to a `String` with the job ID, Start Time, Finish Time & Value
 
 ## References
 - [Design and Analysis of Algorithms I - Larry Ruzzo, University of Washington](https://courses.cs.washington.edu/courses/cse521/13wi/slides/06dp-sched.pdf)
