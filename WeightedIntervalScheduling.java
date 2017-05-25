@@ -80,6 +80,9 @@ public class WeightedIntervalScheduling {
 							{7, 6, 10, 3},
 							{8, 8, 11, 4}
 							};
+		// int[][] inputJobs = {{0, 0,0,0}, {1, 3, 10, 20}, {2, 6, 19, 100}, {3, 1, 2, 50}, {4, 2, 100, 200}};
+		// int[][] inputJobs = {{0, 0,0,0}, {1, 1, 2, 10}, {2, 2, 3, 20}};
+		// int[][] inputJobs = {{0, 0,0,0}, {1, 3, 10, 20}};
 		scheduler.calcSchedule(inputJobs);
 	}
 }
