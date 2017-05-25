@@ -3,7 +3,7 @@ The classic introduction to Dynamic Programming
 
 ## Problem Statement
 Jobs have a start time, a finish time & a value (or weight) associated with it  
-*(Jobs also have an ID associated with them for human readable understanding)*
+*(Jobs also have an ID associated with them for human readable understanding)*  
 **Compatible** jobs don't overlap (a job cannot start before another job finishes)  
 **Find the maximum weight subset of mutually compatible jobs.**
 
