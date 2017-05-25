@@ -40,27 +40,22 @@ public class WeightedIntervalScheduling {
 	
 	//Recursive method to retrace the memoization array & find optimal solution
 	private void findSolution(int j){
-		if(j==0){
+		if(j==0){	//base case
 			return;
 		}
-		//Simplify to just 3 cases? no nested if
 		else{
 			int compatibleIndex = latestCompatible(j);  //find latest finishing job that's compatible with job i
-			if(compatibleIndex==-1){    //If not compatible job exists, reset value to 0
-				compatibleIndex=0;
-				System.out.println("FIND SOL found compatible==-1, j="+j);
+			if(jobs[j][3]+ memo[compatibleIndex] > memo[j-1]){	//Case where job j was included (from optimal substructure)
+				includedJobs.add(j);	//add job index to solution
+				findSolution(compatibleIndex);	//recursively find remaining jobs starting the the latest compatible job
 			}
-			
-			if(jobs[j][3]+ memo[compatibleIndex] > memo[j-1]){
-				includedJobs.add(j);
-				findSolution(compatibleIndex);
-			}
-			else{
+			else{	//case where job j was NOT included, remove job j from the possible jobs in the solution
 				findSolution(j-1);
 			}
 		}
 	}
 	
+	//Get a human-readable String representing the job & its 4 parts
 	private String getJobInfo(int jobIndex){
 		return "Job " + jobs[jobIndex][0] + ":  Time (" + jobs[jobIndex][1] +"-" + jobs[jobIndex][2] +") Value=" + jobs[jobIndex][3];
 	}
