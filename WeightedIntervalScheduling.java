@@ -20,7 +20,7 @@ public class WeightedIntervalScheduling {
 		System.out.println("Memoization array: " + Arrays.toString(memo));
 		System.out.println("Maximum profit from the optimal set of jobs = " + memo[memo.length-1]);
 		
-		findSolutionRecursive(memo.length-1);		//Recursively find solution & update includedJobs
+		findSolutionIterative(memo.length-1);		//Recursively find solution & update includedJobs
 		System.out.println("\nJobs Included in optimal solution:");
 		for(int i=includedJobs.size()-1; i>=0; i--){		//Loop backwards to display jobs in increasing order of their ID's
 			System.out.println(getJobInfo(includedJobs.get(i)));
@@ -45,13 +45,27 @@ public class WeightedIntervalScheduling {
 		return 0;	//No compatible job was found. Return 0 so that value of placeholder job in jobs[0] can be used
 	}
 	
+	//Iterative version of the recursive code to retrace & find the optimal solution
+	public void findSolutionIterative(int j){
+		while (j>0){	//Stops when j==0
+			int compatibleIndex = latestCompatible(j);	//find latest finishing job that's compatible with job j
+			if(jobs[j][3]+ memo[compatibleIndex] > memo[j-1]){	//Case where job j was included (from optimal substructure)
+				includedJobs.add(j);	//add job index to solution
+				j=compatibleIndex;		//update j to the next job to consider
+			}
+			else{	//case where job j was NOT included, remove job j from the possible jobs in the solution & look at jobs 1 to (j-1)
+				j=j-1;
+			}
+		}
+	}
+
 	//Recursive method to retrace the memoization array & find optimal solution
 	private void findSolutionRecursive(int j){
 		if(j==0){	//base case
 			return;
 		}
 		else{
-			int compatibleIndex = latestCompatible(j);  //find latest finishing job that's compatible with job i
+			int compatibleIndex = latestCompatible(j);	//find latest finishing job that's compatible with job j
 			if(jobs[j][3]+ memo[compatibleIndex] > memo[j-1]){	//Case where job j was included (from optimal substructure)
 				includedJobs.add(j);	//add job index to solution
 				findSolutionRecursive(compatibleIndex);	//recursively find remaining jobs starting the the latest compatible job
@@ -80,9 +94,6 @@ public class WeightedIntervalScheduling {
 							{7, 6, 10, 3},
 							{8, 8, 11, 4}
 							};
-		// int[][] inputJobs = {{0, 0,0,0}, {1, 3, 10, 20}, {2, 6, 19, 100}, {3, 1, 2, 50}, {4, 2, 100, 200}};
-		// int[][] inputJobs = {{0, 0,0,0}, {1, 1, 2, 10}, {2, 2, 3, 20}};
-		// int[][] inputJobs = {{0, 0,0,0}, {1, 3, 10, 20}};
 		scheduler.calcSchedule(inputJobs);
 	}
 }
