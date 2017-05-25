@@ -14,25 +14,19 @@ public class WeightedIntervalScheduling {
 		memo[0]=0;		//base case with no jobs selected
 		
 		for(int i = 1; i<jobs.length; i++){
-			int compatibleIndex = latestCompatible(i);	//find latest finishing job that's compatible with job i
-			if(compatibleIndex==-1){	//If not compatible job exists, reset value to 0
-				compatibleIndex=0;
-				System.out.println("found compatible==-1, i="+i);
-			}
-			memo[i] = Math.max( jobs[i][3]+memo[compatibleIndex], memo[i-1] );		//add max value if job is included or if it's not
+			memo[i] = Math.max( jobs[i][3]+memo[latestCompatible(i)],   memo[i-1] );		//add max value if job is included or if it's not included
 		}
 		
 		System.out.println("Memoization array: " + Arrays.toString(memo));
 		System.out.println("Maximum profit from the optimal set of jobs = " + memo[memo.length-1]);
 		
-		findSolution(memo.length-1);
+		findSolution(memo.length-1);		//Recursively find solution & update includedJobs
 		System.out.println("\nJobs Included in optimal solution:");
 		for(int i=includedJobs.size()-1; i>=0; i--){		//Loop backwards to display jobs in increasing order of their ID's
 			System.out.println(getJobInfo(includedJobs.get(i)));
 		}
 	}
 	
-//BINARY SEARCH improvement waiting
 	//Find the index of the job finishing before job i starts (uses jobs[][] array sorted by finish time)
 	private int latestCompatible(int i){
 		for (int j=i-1; j>=0; j--){
@@ -73,11 +67,8 @@ public class WeightedIntervalScheduling {
 
 
 	public static void main(String args[]) {
-		WeightedIntervalScheduling tester = new WeightedIntervalScheduling();
-		//int[][] inputJobs = {{0,0,0}, {3, 10, 20}, {6, 19, 100}, {1, 2, 50}, {2, 100, 200}};
-		//int[][] inputJobs = {{0,0,0}, {1, 2, 10}, {2, 3, 20}};
-		//int[][] inputJobs = {{0,0,0}, {3, 10, 20}};
-		int[][] inputJobs = {{0,0,0,0},	//dummy 0th item to make array indexes line up
+		WeightedIntervalScheduling scheduler = new WeightedIntervalScheduling();
+		int[][] inputJobs = {{0,0,0,0},		//dummy 0th item to make array indexes line up
 							{1, 0, 6, 3},
 							{2, 1, 4, 5},
 							{3, 3, 5, 5},
@@ -87,6 +78,6 @@ public class WeightedIntervalScheduling {
 							{7, 6, 10, 3},
 							{8, 8, 11, 4}
 							};
-		tester.calcSchedule(inputJobs);
+		scheduler.calcSchedule(inputJobs);
 	}
 }
