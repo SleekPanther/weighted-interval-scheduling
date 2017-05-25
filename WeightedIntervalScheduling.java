@@ -29,13 +29,20 @@ public class WeightedIntervalScheduling {
 	
 	//Find the index of the job finishing before job i starts (uses jobs[][] array sorted by finish time)
 	private int latestCompatible(int i){
-		for (int j=i-1; j>=0; j--){
-			// System.out.println("jobs[j][2] <= jobs[i][1] " + jobs[j][2] +" <= "+ jobs[i][1] +" is "+ (jobs[j][2] <= jobs[i][1]) ) ;
-			if (jobs[j][2] <= jobs[i][1]){	//If j's finish time is less than or equal to i's start time
-				return j;
+		int low = 0, high = i - 1;
+
+		while (low <= high){		//Iterative binary search
+			int mid = (low + high) / 2;		//integer division (floor)
+			if (jobs[mid][2] <= jobs[i][1]) {
+				if (jobs[mid + 1][2] <= jobs[i][1])
+					low = mid + 1;
+				else
+					return mid;
 			}
+			else
+				high = mid - 1;
 		}
-		return 0;	//or return -1??
+		return 0;	//No compatible job was found. Return 0 so that value of placeholder job in jobs[0] can be used
 	}
 	
 	//Recursive method to retrace the memoization array & find optimal solution
