@@ -6,6 +6,9 @@ Jobs have an ID, start time, a finish time & a value (or weight)
 **Find the maximum weight subset of mutually compatible jobs.**  
 2 jobs are **Compatible** if they don't overlap (1 job cannot start before the other job finishes)  
 
+## Optimal Substructure
+![](images/optimal-substructure.png)
+
 ## Input Jobs
 ![](images/input-jobs.png)  
 For example: job `6` is compatible with job `3` & `2`. Jobs `1`, `4` & `5` are incompatible because they finish after job `6` starts and jobs `7` & `8` are incompatible because they start before job `6` ends (the algorithm presorts jobs by finish time so `7` & `8` are never considered when looking for compatible jobs)  
